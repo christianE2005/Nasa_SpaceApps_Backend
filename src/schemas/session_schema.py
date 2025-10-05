@@ -14,3 +14,7 @@ class SessionResponse(BaseModel):
     
     class Config:
         from_attributes = True
+
+class Coordinates(BaseModel):
+    lon: float
+    lat: float

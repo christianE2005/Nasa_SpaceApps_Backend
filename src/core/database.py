@@ -6,19 +6,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Database URL from environment
 DATABASE_URL = os.getenv("DATABASE_URL")
-
-# Create engine
 engine = create_engine(DATABASE_URL, echo=True)
-
-# Create SessionLocal class
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-# Create Base class for models
 Base = declarative_base()
 
-# Dependency to get DB session
 def get_db():
     db = SessionLocal()
     try:
