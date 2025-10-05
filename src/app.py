@@ -1,8 +1,15 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from src.core.settings import get_settings
+from src.api.routes import router
 
-app = FastAPI()
+app = FastAPI(
+    title="NASA Space Apps - Urban EarthLens",
+    description="API para consultar datos de calidad urbana filtrados por área geográfica",
+    version="1.0.0",
+    docs_url="/docs",
+    redoc_url="/redoc"
+)
 settings = get_settings()
 
 app.add_middleware(
@@ -13,13 +20,27 @@ app.add_middleware(
     allow_headers = settings.allowed_headers or ["*"]
 )
 
+# Registrar los endpoints de Urban Quality
+app.include_router(router)
+
 
 @app.get("/")
 def health():
+    """Health check endpoint"""
     return {
-        "Database Host": settings.database_host,
-        "Database Name": settings.database_name,
-        "Database Port": settings.database_port,
-        "Pool Size": settings.database_pool_size,
-        "Max Overflow": settings.database_max_overflow,
+        "status": "healthy",
+        "message": "NASA Space Apps API está funcionando correctamente",
+        "version": "1.0.0",
+        "endpoints": {
+            "population": "/api/v1/population",
+            "education": "/api/v1/education",
+            "trees": "/api/v1/trees"
+        },
+        "database": {
+            "host": settings.database_host,
+            "name": settings.database_name,
+            "port": settings.database_port,
+            "pool_size": settings.database_pool_size,
+            "max_overflow": settings.database_max_overflow,
+        }
     }

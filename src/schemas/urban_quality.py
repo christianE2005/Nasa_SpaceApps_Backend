@@ -64,3 +64,34 @@ class UrbanQualityOut(UrbanQualityBase):
     updated_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
+
+
+# ============ Schemas específicos para endpoints del frontend ============
+
+class PopulationData(BaseModel):
+    """Endpoint 1: Datos de población total"""
+    lat: float
+    lon: float
+    POBTOT: int
+    
+    model_config = ConfigDict(from_attributes=True)
+
+
+class EducationData(BaseModel):
+    """Endpoint 2: Datos de grado promedio de escolaridad"""
+    lat: float
+    lon: float
+    GRAPROES: Optional[float] = None
+    GRAPROES_F: Optional[float] = None
+    GRAPROES_M: Optional[float] = None
+    
+    model_config = ConfigDict(from_attributes=True)
+
+
+class TreesData(BaseModel):
+    """Endpoint 3: Datos de árboles en la calle"""
+    lat: float
+    lon: float
+    ARBOLES_C: Optional[int] = None
+    
+    model_config = ConfigDict(from_attributes=True)
