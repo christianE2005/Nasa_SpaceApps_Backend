@@ -22,7 +22,7 @@ from src.models.unequality_indicators import UnequalityIndicators  # noqa: E402
 
 
 LOGGER = logging.getLogger("loadto_db")
-DEFAULT_STATIC_DIR = ROOT_DIR / "static"
+DEFAULT_STATIC_DIR = ROOT_DIR / "Nasa_SpaceApps_Backend/static"
 BATCH_SIZE = 500
 
 
