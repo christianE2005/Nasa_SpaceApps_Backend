@@ -3,13 +3,16 @@ from mcp import ClientSession
 from mcp.client.streamable_http import streamablehttp_client
 from langchain_mcp_adapters.tools import load_mcp_tools
 
-async def main():
-    async with streamablehttp_client("http://localhost:8000/mcp") as (read, write, _):
-        async with ClientSession(read, write) as session:
-            await session.initialize()
+class MCPClient:
+    def __init__(self, host: str):
+        self.host = host
+        self.tools = []
+        self.prompts = []
+        self.templates = []
 
-            tools = await load_mcp_tools(session)
-            print(tools)
-
-if __name__ == "__main__":
-    asyncio.run(main())
+    async def get_tools(self):
+        async with streamablehttp_client(self.host) as (read, write, _):
+            async with ClientSession(read, write) as session:
+                await session.initialize()
+                self.tools = await load_mcp_tools(session)
+                return self.tools
