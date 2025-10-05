@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from src.core.settings import get_settings
 from src.api.routes import router
+from src.api import api_router
 
 app = FastAPI(
     title="NASA Space Apps - Urban EarthLens",
@@ -22,7 +23,7 @@ app.add_middleware(
 
 # Registrar los endpoints de Urban Quality
 app.include_router(router)
-
+app.include_router(api_router)
 
 @app.get("/")
 def health():
