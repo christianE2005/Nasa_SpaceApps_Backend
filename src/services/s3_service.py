@@ -28,7 +28,7 @@ class S3Service:
 
         s3_key = f"usuarios/{user_id}/sesiones/{session_id}_{filename}"
         
-        try:
+        try: 
             self.s3_client.put_object(
                 Bucket=self.bucket_name,
                 Key=s3_key,
@@ -64,7 +64,6 @@ class S3Service:
             raise Exception(f"Error al descargar archivo de S3: {str(e)}")
     
     def delete_csv(self, s3_key: str) -> bool:
-       
         # Elimina un archivo CSV de S3
 
         try:
