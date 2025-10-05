@@ -33,8 +33,8 @@ class S3Service:
                 Bucket=self.bucket_name,
                 Key=s3_key,
                 Body=file_content,
-                ContentType='text/csv',
-                ACL='public-read'  
+                ContentType='text/csv'
+                # ACL removido - el bucket debe tener una política de acceso público en su lugar
             )
             return s3_key
         except ClientError as e:
