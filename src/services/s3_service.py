@@ -34,8 +34,8 @@ class S3Service:
                 Key=s3_key,
                 Body=file_content,
                 ContentType='text/csv'
-                # ACL removido - el bucket debe tener una política de acceso público en su lugar
             )
+                
             return s3_key
         except ClientError as e:
             raise Exception(f"Error al subir archivo a S3: {str(e)}")
