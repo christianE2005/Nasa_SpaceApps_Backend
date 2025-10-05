@@ -1,15 +1,20 @@
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import relationship
-from src.database.database import Base
+from typing import TYPE_CHECKING, List
+from sqlalchemy.orm import relationship, Mapped, mapped_column
+from sqlalchemy import String
+from src.core.models import UUIDPrimaryKey, Timestamp
+from src.core.database import Base
 
-class User(Base):
+if TYPE_CHECKING:
+    from .session import Session
+
+class User(Base, UUIDPrimaryKey, Timestamp):
     __tablename__ = "users"
-    
-    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    email = Column(String, unique=True, index=True, nullable=False)
-    
-    # Relationship with sessions
-    sessions = relationship("Session", back_populates="user", cascade="all, delete-orphan")
-    
-    def __repr__(self):
-        return f"<User(id={self.id}, email={self.email})>"
+
+    user_email: Mapped[str] = mapped_column(String(255), unique=True, nullable=False)
+
+    sessions: Mapped[List["Session"]] = relationship(
+        "Session",
+        back_populates="user",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+    )

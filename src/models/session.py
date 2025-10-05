@@ -1,23 +1,24 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, JSON
-from sqlalchemy.orm import relationship
-from src.database.database import Base
+from typing import TYPE_CHECKING, Dict, Any
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import String, JSON, ForeignKey
+from src.core.models import UUIDPrimaryKey, Timestamp
+from src.core.database import Base
 
-class Session(Base):
+if TYPE_CHECKING:
+    from .user import User
+
+class Session(Base, UUIDPrimaryKey, Timestamp):
     __tablename__ = "sessions"
-    
-    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    parametros = Column(JSON, nullable=False) 
-    csv_s3_key = Column(String, nullable=False) 
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    
-    # Relationship with user
-    user = relationship("User", back_populates="sessions")
-    
-    def __repr__(self):
-        return f"<Session(id={self.id}, user_id={self.user_id})>"
-    
-    def get_s3_url(self, bucket_name: str, region: str = 'us-east-2'):
-        # Retorna la URL pública de S3
-        if not self.csv_s3_key:
-            return None
-        return f"https://{bucket_name}.s3.{region}.amazonaws.com/{self.csv_s3_key}"
+
+    parametros: Mapped[Dict[str, Any]] = mapped_column(JSON, nullable=False)
+    csv_url: Mapped[str] = mapped_column(String(2048), nullable=False)
+
+    user_id: Mapped[str] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+
+    user: Mapped["User"] = relationship(
+        "User",
+        back_populates="sessions",
+    )
